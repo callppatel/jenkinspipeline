@@ -24,5 +24,22 @@ stages{
                 }
             }
         }
+     stage ('Deployments'){
+            parallel{
+                stage ('Deploy to Staging'){
+                    steps {
+                        echo 'Before deploy to staging ..'
+                        bat "scp -i /Users/callp/tomcatdemo.pem **/target/*.war ec2-user@${params.tomcat_dev}:/var/lib/tomcat7/webapps"
+                    }
+                }
+
+                stage ("Deploy to Production"){
+                    steps {
+                         echo 'Before deploy to Production ..'
+                        bat "scp -i /Users/callp/tomcatdemo.pem **/target/*.war ec2-user@${params.tomcat_prod}:/var/lib/tomcat7/webapps"
+                    }
+                }
+            }
+        }
     }
 }
